@@ -32,7 +32,7 @@ public class TestController implements IChatController
     @Override
     public void openChatWith(IUser user)
     {
-        if (chatHistory.containsKey(user))
+        if (!chatHistory.containsKey(user))
         {
             chatHistory.put(user, new ArrayList<IMessage>());
         }

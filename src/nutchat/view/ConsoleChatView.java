@@ -1,6 +1,5 @@
 package nutchat.view;
 
-import java.io.Console;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import nutchat.model.MessageType;
 
 public class ConsoleChatView implements IChatView
 {
-    private final Console console;
+    // private final Console console;
     private final ConsoleThread uiThread;
     private final IChatController controller;
     private List<IUser> contactList;
@@ -32,15 +31,19 @@ public class ConsoleChatView implements IChatView
      */
     public ConsoleChatView(IChatController controller) throws IllegalStateException
     {
-        this.console = System.console();
-        if (console == null)
-        {
-            throw new IllegalStateException("# No console for ConsoleChatView to use!");
-        }
+        // this.console = System.console();
+        // if (console == null)
+        // {
+        // throw new
+        // IllegalStateException("# No console for ConsoleChatView to use!");
+        // }
+        controller.setView(this);
         this.contactList = new ArrayList<>(0);
         this.controller = controller;
         uiThread = new ConsoleThread();
         uiThread.setDaemon(false);
+        controller.getCurrentUser();
+        controller.getUsers();
         uiThread.start();
     }
 
@@ -85,6 +88,7 @@ public class ConsoleChatView implements IChatView
     @Override
     public void showContacts(List<IUser> users)
     {
+        this.contactList = users;
         uiThread.println("# Your contacts: ");
         int index = 0;
         for (IUser user : users)
@@ -102,7 +106,7 @@ public class ConsoleChatView implements IChatView
      */
     private class ConsoleThread extends Thread
     {
-        private final Scanner scanner = new Scanner(console.reader());
+        private final Scanner scanner = new Scanner(System.in/* console.reader() */);
         private static final String helpMessage = "[q]uit\n" + "[i]nfo (ip, username)\n"
                         + "[e]dit my username\n" + "[l]ist contacts\n" + "[a]dd contact\n"
                         + "[r]emove contact\n" + "[c]hat\n";
@@ -111,6 +115,7 @@ public class ConsoleChatView implements IChatView
         public void run()
         {
             boolean isExit = false;
+            println("# Welcome in NutChat!");
             while (isExit == false)
             {
                 switch (getNextCommand())
@@ -149,7 +154,9 @@ public class ConsoleChatView implements IChatView
             println("# Enter index number of user you want to chat with (the number on contact list):");
             try
             {
-                int index = scanner.nextInt();
+                int index = Integer.parseInt(scanner.nextLine());
+                println(String.format("# Chatting with %s (press Enter to send, then 'e' to quit chat)",
+                                contactList.get(index).getUserName()));
                 controller.openChatWith(contactList.get(index));
                 beginChatLoop(contactList.get(index));
             }
@@ -166,23 +173,18 @@ public class ConsoleChatView implements IChatView
         private void beginChatLoop(IUser iUser)
         {
             boolean isExit = false;
-            println(String.format("# Chatting with %s", iUser.getUserName()));
             while (!isExit)
             {
                 // compose message
-                println("# Enter message (to send press Ctrl+D on Linux or Ctrl+Z on Windows):");
-                StringBuilder messageBuilder = new StringBuilder();
-                String msgLine = console.readLine();
-                while (msgLine != null)
-                {
-                    messageBuilder.append(msgLine);
-                    msgLine = console.readLine();
-                }
-                controller.sendMessage(new ChatMessage(MessageType.TEXT, messageBuilder.toString(),
-                                self, iUser));
-                print("# To exit enter 'e', to continue press Enter: ");
-                isExit = console.readLine().startsWith("e");
+                print(String.format("%s: ", self.getUserName()));
+                scanner.hasNextLine();
+                controller.sendMessage(new ChatMessage(MessageType.TEXT, scanner.nextLine(), self,
+                                iUser));
+                scanner.hasNextLine();
+                print(">");
+                isExit = /* console.readLine() */scanner.nextLine().startsWith("e");
             }
+            println("Quitted chat.");
         }
 
         private void selfEdit()
@@ -233,12 +235,12 @@ public class ConsoleChatView implements IChatView
 
         private void print(String message)
         {
-            console.writer().print(message);
+            System.out/* console.writer() */.print(message);
         }
 
         private void println(String message)
         {
-            console.writer().println(message);
+            System.out/* console.writer() */.println(message);
         }
 
         private ChatCommand getNextCommand()
