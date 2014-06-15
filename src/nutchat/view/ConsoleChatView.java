@@ -23,6 +23,13 @@ public class ConsoleChatView implements IChatView
     private List<IUser> contactList;
     private IUser self;
 
+    /**
+     * Calls {@link IChatController#setView(IChatView)} providing <b>this</b> as
+     * argument.
+     * 
+     * @param controller
+     * @throws IllegalStateException
+     */
     public ConsoleChatView(IChatController controller) throws IllegalStateException
     {
         this.console = System.console();
