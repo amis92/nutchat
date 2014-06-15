@@ -11,5 +11,9 @@ public interface IMessage
     public MessageType getType();
 
     public String getText();
+    
+    public IUser getSender();
+    
+    public IUser getRecipient();
 
 }
