@@ -8,5 +8,8 @@ package nutchat.model;
  */
 public interface IMessage
 {
+    public MessageType getType();
+
+    public String getText();
 
 }
