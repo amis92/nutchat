@@ -278,7 +278,6 @@ public class ChatFrame extends JFrame
                 chatMap.put(user, new ChatPanel(user, chat, dispatcher));
                 panel.add(chatMap.get(user), user.getUserName());
             }
-            // chatMap.get(user).;
             cardLayout.show(panel, user.getUserName());
             if (messageAwaitingUser == currentChatPartner)
             {
@@ -300,8 +299,8 @@ public class ChatFrame extends JFrame
 
         private String formatTitle(boolean isAwaiting)
         {
-            return String.format("NutChat - %s (%s)", currentUser.getUserName(), currentUser
-                            .getAddress().getHostAddress());
+            return String.format("%sNutChat - %s (%s)", isAwaiting ? "(!)" : "",
+                            currentUser.getUserName(), currentUser.getAddress().getHostAddress());
         }
     }
 }
