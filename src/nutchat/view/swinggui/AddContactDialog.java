@@ -2,15 +2,24 @@ package nutchat.view.swinggui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+
+import nutchat.model.ChatUser;
+import nutchat.model.IUser;
 
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -28,29 +37,14 @@ public class AddContactDialog extends JDialog
     private JTextField usernameField;
     private JTextField addressField;
     private JPanel panel;
-
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args)
-    {
-        try
-        {
-            AddContactDialog dialog = new AddContactDialog();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
+    private IUser newUser = null;
 
     /**
      * Create the dialog.
      */
-    public AddContactDialog()
+    public AddContactDialog(JFrame owner, boolean modal)
     {
+        super(owner, modal);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setTitle("Add new user");
         setBounds(100, 100, 260, 181);
@@ -106,16 +100,39 @@ public class AddContactDialog extends JDialog
             getContentPane().add(buttonPane, BorderLayout.SOUTH);
             {
                 JButton addButton = new JButton("Add");
+                addButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent arg0) {
+                        try
+                        {
+                            newUser = new ChatUser(usernameField.getText(), InetAddress.getByName(addressField.getText()));
+                            dispose();
+                        }
+                        catch (UnknownHostException e)
+                        {
+                            JOptionPane.showMessageDialog(rootPane, "Address couldn't have been resolved.", "Address error", ERROR);
+                        }
+                    }
+                });
                 addButton.setActionCommand("OK");
                 buttonPane.add(addButton);
                 getRootPane().setDefaultButton(addButton);
             }
             {
                 JButton cancelButton = new JButton("Cancel");
+                cancelButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent arg0) {
+                        dispose();
+                    }
+                });
                 cancelButton.setActionCommand("Cancel");
                 buttonPane.add(cancelButton);
             }
         }
+    }
+    
+    public IUser getNewUser()
+    {
+        return newUser;
     }
 
 }

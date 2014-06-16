@@ -25,4 +25,9 @@ public class ChatUser implements IUser
         return address;
     }
 
+    @Override
+    public String toString()
+    {
+        return String.format("%s (%s)", username, address.getHostAddress());
+    }
 }

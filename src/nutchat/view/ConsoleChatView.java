@@ -1,5 +1,6 @@
 package nutchat.view;
 
+import java.awt.EventQueue;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class ConsoleChatView implements IChatView
     }
 
     @Override
-    public void showChat(List<IMessage> chat)
+    public void showChatWith(IUser user, List<IMessage> chat)
     {
         for (IMessage m : chat)
         {
@@ -65,13 +66,20 @@ public class ConsoleChatView implements IChatView
     {
         if (message.getType() == MessageType.TEXT)
         {
-            uiThread.print(String.format(
-                            "# You have new message from %s: %s...",
-                            message.getSender().getUserName(),
-                            message.getText().substring(
-                                            0,
-                                            message.getText().length() > 20 ? 20 : message
-                                                            .getText().length())));
+            if (uiThread.currentChatUser != message.getSender())
+            {
+                uiThread.println(String.format(
+                                "# You have new message from %s: %s...",
+                                message.getSender().getUserName(),
+                                message.getText().substring(
+                                                0,
+                                                message.getText().length() > 20 ? 20 : message
+                                                                .getText().length())));
+            }
+            else
+            {
+                uiThread.println(String.format("%s: %s", message.getSender(), message.getText()));
+            }
         }
     }
 
@@ -107,6 +115,7 @@ public class ConsoleChatView implements IChatView
     private class ConsoleThread extends Thread
     {
         private final Scanner scanner = new Scanner(System.in/* console.reader() */);
+        private IUser currentChatUser = null;
         private static final String helpMessage = "[q]uit\n" + "[i]nfo (ip, username)\n"
                         + "[e]dit my username\n" + "[l]ist contacts\n" + "[a]dd contact\n"
                         + "[r]emove contact\n" + "[c]hat\n";
@@ -155,10 +164,11 @@ public class ConsoleChatView implements IChatView
             try
             {
                 int index = Integer.parseInt(scanner.nextLine());
-                println(String.format("# Chatting with %s (press Enter to send, then 'e' to quit chat)",
+                println(String.format(
+                                "# Chatting with %s (press Enter to send, then 'e' to quit chat)",
                                 contactList.get(index).getUserName()));
                 controller.openChatWith(contactList.get(index));
-                beginChatLoop(contactList.get(index));
+                chatLoop(contactList.get(index));
             }
             catch (InputMismatchException e)
             {
@@ -170,21 +180,32 @@ public class ConsoleChatView implements IChatView
             }
         }
 
-        private void beginChatLoop(IUser iUser)
+        private void chatLoop(final IUser iUser)
         {
             boolean isExit = false;
+            currentChatUser = iUser;
             while (!isExit)
             {
                 // compose message
                 print(String.format("%s: ", self.getUserName()));
                 scanner.hasNextLine();
-                controller.sendMessage(new ChatMessage(MessageType.TEXT, scanner.nextLine(), self,
-                                iUser));
-                scanner.hasNextLine();
+                final String msg = scanner.nextLine();
+                EventQueue.invokeLater(new Runnable()
+                    {
+
+                        @Override
+                        public void run()
+                        {
+                            controller.sendMessage(new ChatMessage(MessageType.TEXT, msg, self,
+                                            iUser));
+                        }
+                    });
                 print(">");
+                scanner.hasNextLine();
                 isExit = /* console.readLine() */scanner.nextLine().startsWith("e");
             }
             println("Quitted chat.");
+            currentChatUser = null;
         }
 
         private void selfEdit()

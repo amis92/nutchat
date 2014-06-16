@@ -21,7 +21,7 @@ public interface IChatView
      * @param chat
      *            - the chat contents.
      */
-    public void showChat(List<IMessage> chat);
+    public void showChatWith(IUser user, List<IMessage> chat);
 
     /**
      * UI will inform user on new pending message or not - if, for example,

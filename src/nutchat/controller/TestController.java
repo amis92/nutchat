@@ -7,19 +7,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import nutchat.model.ChatMessage;
 import nutchat.model.ChatUser;
 import nutchat.model.IMessage;
 import nutchat.model.IUser;
+import nutchat.model.MessageType;
 import nutchat.view.IChatView;
 
 public class TestController implements IChatController
 {
     private IChatView view;
-    
+
     private List<IUser> contactList;
     private IUser self;
     private Map<IUser, List<IMessage>> chatHistory;
-    
+
     public TestController() throws UnknownHostException
     {
         contactList = new ArrayList<>();
@@ -36,13 +38,18 @@ public class TestController implements IChatController
         {
             chatHistory.put(user, new ArrayList<IMessage>());
         }
-        view.showChat(chatHistory.get(user));
+        view.showChatWith(user, chatHistory.get(user));
     }
 
     @Override
     public void sendMessage(IMessage message)
     {
         chatHistory.get(message.getRecipient()).add(message);
+        ChatMessage msgBack = new ChatMessage(MessageType.TEXT, String.format("Copy: %s",
+                        message.getText()), message.getRecipient(), message
+                        .getSender());
+        chatHistory.get(message.getRecipient()).add(msgBack);
+        view.showNewMessage(msgBack);
     }
 
     @Override

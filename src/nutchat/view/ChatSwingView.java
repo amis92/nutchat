@@ -18,40 +18,38 @@ public class ChatSwingView implements IChatView
     {
         this.controller = controller;
         this.controller.setView(this);
-        
+
         // GUI setup
-        frame = new ChatFrame();
+        frame = new ChatFrame(controller);
         frame.setBounds(100, 100, 450, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        controller.getCurrentUser();
+        controller.getUsers();
     }
 
     @Override
-    public void showChat(List<IMessage> chat)
+    public void showChatWith(IUser user, List<IMessage> chat)
     {
-        // TODO Auto-generated method stub
-
+        frame.openChatWith(user, chat);
     }
 
     @Override
     public void showNewMessage(IMessage message)
     {
-        // TODO Auto-generated method stub
-
+        frame.showNewMessage(message);
     }
 
     @Override
     public void showCurrentUser(IUser user)
     {
-        // TODO Auto-generated method stub
-
+        frame.refreshCurrentInfo(user);
     }
 
     @Override
     public void showContacts(List<IUser> users)
     {
-        // TODO Auto-generated method stub
-
+        frame.refreshContactList(users);
     }
 
 }
