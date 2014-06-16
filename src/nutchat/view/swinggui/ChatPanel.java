@@ -119,6 +119,7 @@ public class ChatPanel extends JPanel
         }
 
         JList<IMessage> chatMessagesList = new JList<>(listModel);
+        chatMessagesList.setEnabled(false);
         scrollPane.setViewportView(chatMessagesList);
     }
 
