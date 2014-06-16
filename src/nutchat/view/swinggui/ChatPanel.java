@@ -10,6 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.TitledBorder;
 
 public class ChatPanel extends JPanel
 {
@@ -66,10 +69,13 @@ public class ChatPanel extends JPanel
         gbc_sendHintLabel.gridy = 1;
         newMessagePanel.add(sendHintLabel, gbc_sendHintLabel);
         
-        JList messageList = new JList();
-        messageList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        messageList.setEnabled(false);
-        splitPane.setLeftComponent(messageList);
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportBorder(new TitledBorder(null, "Chat:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        splitPane.setLeftComponent(scrollPane);
+        
+        JList chatMessagesList = new JList();
+        scrollPane.setViewportView(chatMessagesList);
 
     }
 

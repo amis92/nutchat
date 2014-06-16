@@ -1,5 +1,6 @@
 package nutchat.app;
 
+import java.awt.EventQueue;
 import java.net.UnknownHostException;
 
 import nutchat.controller.TestController;
@@ -15,6 +16,19 @@ public class SwingApp
      */
     public static void main(String[] args) throws UnknownHostException
     {
-        new ChatSwingView(new TestController());
+        EventQueue.invokeLater(new Runnable()
+            {
+                public void run()
+                {
+                    try
+                    {
+                        new ChatSwingView(new TestController());
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            });
     }
 }
