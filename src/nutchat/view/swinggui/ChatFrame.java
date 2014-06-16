@@ -1,25 +1,28 @@
 package nutchat.view.swinggui;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
-import javax.swing.JSplitPane;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.SwingConstants;
-import javax.swing.JList;
-import java.awt.Insets;
-import javax.swing.ListSelectionModel;
 import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 public class ChatFrame extends JFrame
 {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private JPanel contentPane;
 
     /**
@@ -54,14 +57,28 @@ public class ChatFrame extends JFrame
         gbc_listHeaderPanel.gridx = 0;
         gbc_listHeaderPanel.gridy = 0;
         leftPanel.add(listHeaderPanel, gbc_listHeaderPanel);
-        listHeaderPanel.setLayout(new GridLayout(1, 0, 0, 0));
+        GridBagLayout gbl_listHeaderPanel = new GridBagLayout();
+        gbl_listHeaderPanel.columnWidths = new int[]{52, 52, 0};
+        gbl_listHeaderPanel.rowHeights = new int[]{23, 0};
+        gbl_listHeaderPanel.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
+        gbl_listHeaderPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+        listHeaderPanel.setLayout(gbl_listHeaderPanel);
         
-        JLabel lblNewLabel = new JLabel("Contacts");
-        listHeaderPanel.add(lblNewLabel);
+        JLabel contactListLabel = new JLabel("Contacts");
+        GridBagConstraints gbc_contactListLabel = new GridBagConstraints();
+        gbc_contactListLabel.fill = GridBagConstraints.BOTH;
+        gbc_contactListLabel.insets = new Insets(0, 0, 0, 5);
+        gbc_contactListLabel.gridx = 0;
+        gbc_contactListLabel.gridy = 0;
+        listHeaderPanel.add(contactListLabel, gbc_contactListLabel);
         
         JButton btnNewButton = new JButton("+");
         btnNewButton.setHorizontalAlignment(SwingConstants.RIGHT);
-        listHeaderPanel.add(btnNewButton);
+        GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+        gbc_btnNewButton.anchor = GridBagConstraints.EAST;
+        gbc_btnNewButton.gridx = 1;
+        gbc_btnNewButton.gridy = 0;
+        listHeaderPanel.add(btnNewButton, gbc_btnNewButton);
         
         JList contactList = new JList();
         contactList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

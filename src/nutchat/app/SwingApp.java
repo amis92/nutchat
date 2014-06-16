@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 import nutchat.controller.TestController;
 import nutchat.view.ChatSwingView;
 
-public class SwingChatGui
+public class SwingApp
 {
 
     /**
