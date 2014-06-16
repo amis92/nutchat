@@ -13,4 +13,6 @@ public interface IUser
     public String getUserName();
 
     public InetAddress getAddress();
+    
+    public void setUserName(String newUserName);
 }

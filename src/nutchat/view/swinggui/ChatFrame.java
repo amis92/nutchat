@@ -171,6 +171,7 @@ public class ChatFrame extends JFrame
     public void refreshCurrentInfo(IUser self)
     {
         currentUser = self;
+        chatManager.dispatcher.setSender(currentUser);
         setTitle(chatManager.formatTitle(false));
     }
 
@@ -247,7 +248,7 @@ public class ChatFrame extends JFrame
         private final CardLayout cardLayout;
         private final Map<IUser, ChatPanel> chatMap;
         private final MessageDispatcher dispatcher;
-        private IUser currentChatUser = null;
+        private IUser currentChatPartner = null;
         private IUser messageAwaitingUser = null;
 
         public ChatManager(JPanel cardPanel)
@@ -270,7 +271,7 @@ public class ChatFrame extends JFrame
          */
         public void openChatWith(IUser user, List<IMessage> chat)
         {
-            currentChatUser = user;
+            currentChatPartner = user;
             if (!chatMap.containsKey(user))
             {
                 chatMap.put(user, new ChatPanel(user, chat, dispatcher));
@@ -278,7 +279,7 @@ public class ChatFrame extends JFrame
             }
             // chatMap.get(user).;
             cardLayout.show(panel, user.getUserName());
-            if (messageAwaitingUser == currentChatUser)
+            if (messageAwaitingUser == currentChatPartner)
             {
                 setTitle(formatTitle(false));
             }
@@ -286,11 +287,14 @@ public class ChatFrame extends JFrame
 
         public void informOnNewMessage(IMessage message)
         {
-            if (message.getSender() != currentChatUser)
+            if (message.getSender() != currentChatPartner && message.getSender() != currentUser)
             {
                 messageAwaitingUser = message.getSender();
                 setTitle(formatTitle(true));
             }
+            IUser chatParter = message.getRecipient() == currentUser ? message.getSender()
+                            : message.getRecipient();
+            chatMap.get(chatParter).showNewMessage(message);
         }
 
         private String formatTitle(boolean isAwaiting)

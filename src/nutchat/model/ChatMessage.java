@@ -39,4 +39,9 @@ public class ChatMessage implements IMessage
         return recipient;
     }
 
+    @Override
+    public String toString()
+    {
+        return String.format("%s: %s", sender, contents);
+    }
 }

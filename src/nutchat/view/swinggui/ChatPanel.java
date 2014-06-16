@@ -18,6 +18,8 @@ import javax.swing.border.TitledBorder;
 import nutchat.model.IMessage;
 import nutchat.model.IUser;
 import nutchat.model.MessageDispatcher;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  * Represents single-user chat panel with chat history and a new message field.
@@ -35,7 +37,8 @@ public class ChatPanel extends JPanel
     /**
      * Create the panel.
      */
-    public ChatPanel(IUser chatPartner, List<IMessage> chat, MessageDispatcher dispatcher)
+    public ChatPanel(final IUser chatPartner, List<IMessage> chat,
+                    final MessageDispatcher dispatcher)
     {
         this.chatPartner = chatPartner;
         this.dispatcher = dispatcher;
@@ -65,7 +68,26 @@ public class ChatPanel extends JPanel
         gbl_newMessagePanel.rowWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };
         newMessagePanel.setLayout(gbl_newMessagePanel);
 
-        JTextArea newMessageTextArea = new JTextArea();
+        final JTextArea newMessageTextArea = new JTextArea();
+        newMessageTextArea.addKeyListener(new KeyAdapter()
+            {
+                @Override
+                public void keyPressed(KeyEvent arg0)
+                {
+                    if (arg0.isShiftDown() && arg0.getKeyCode() == KeyEvent.VK_ENTER)
+                    {
+                        newMessageTextArea.append("\n");
+                        arg0.consume();
+                    }
+                    else if (arg0.getKeyCode() == KeyEvent.VK_ENTER)
+                    {
+                        ChatPanel.this.dispatcher.sendMessage(ChatPanel.this.chatPartner,
+                                        newMessageTextArea.getText());
+                        newMessageTextArea.setText("");
+                        arg0.consume();
+                    }
+                }
+            });
         newMessageTextArea.setTabSize(4);
         GridBagConstraints gbc_newMessageTextArea = new GridBagConstraints();
         gbc_newMessageTextArea.insets = new Insets(5, 5, 0, 5);

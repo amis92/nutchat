@@ -14,7 +14,7 @@ import nutchat.controller.IChatController;
 public class MessageDispatcher
 {
     private final IChatController controller;
-    private final IUser sender;
+    private IUser sender;
 
     /**
      * Sets up this dispatcher to send messages to controller. All messages are
@@ -54,7 +54,7 @@ public class MessageDispatcher
     }
 
     /**
-     * Sends message to controller. Convenience class fo use with
+     * Sends message to controller. Convenience class to use with
      * EventQueue.invokeLater.
      * 
      * @author Amadeusz Sadowski 2014
@@ -75,5 +75,10 @@ public class MessageDispatcher
             controller.sendMessage(message);
         }
 
+    }
+    
+    public void setSender(IUser sender)
+    {
+        this.sender = sender;
     }
 }

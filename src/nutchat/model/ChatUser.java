@@ -4,7 +4,7 @@ import java.net.InetAddress;
 
 public class ChatUser implements IUser
 {
-    private final String username;
+    private String username;
     private final InetAddress address;
 
     public ChatUser(String username, InetAddress address)
@@ -17,6 +17,12 @@ public class ChatUser implements IUser
     public String getUserName()
     {
         return username;
+    }
+
+    @Override
+    public void setUserName(String newUserName)
+    {
+        this.username = newUserName;
     }
 
     @Override

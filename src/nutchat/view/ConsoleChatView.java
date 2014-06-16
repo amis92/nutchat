@@ -64,6 +64,7 @@ public class ConsoleChatView implements IChatView
     @Override
     public void showNewMessage(IMessage message)
     {
+        if (message.getSender() == self)
         if (message.getType() == MessageType.TEXT)
         {
             if (uiThread.currentChatUser != message.getSender())

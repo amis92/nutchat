@@ -45,6 +45,7 @@ public class TestController implements IChatController
     public void sendMessage(IMessage message)
     {
         chatHistory.get(message.getRecipient()).add(message);
+        view.showNewMessage(message);
         ChatMessage msgBack = new ChatMessage(MessageType.TEXT, String.format("Copy: %s",
                         message.getText()), message.getRecipient(), message
                         .getSender());
