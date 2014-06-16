@@ -19,6 +19,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -32,6 +33,8 @@ import nutchat.controller.IChatController;
 import nutchat.model.IMessage;
 import nutchat.model.IUser;
 import nutchat.model.MessageDispatcher;
+
+import java.awt.event.ActionListener;
 
 public class ChatFrame extends JFrame
 {
@@ -138,6 +141,14 @@ public class ChatFrame extends JFrame
         leftPanel.add(footerPanel, gbc_footerPanel);
 
         JButton aboutButton = new JButton("About NutChat");
+        aboutButton.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent arg0)
+                {
+                    JOptionPane.showConfirmDialog(ChatFrame.this, new InfoPanel(),
+                                    "Information on NutChat", JOptionPane.OK_CANCEL_OPTION);
+                }
+            });
         footerPanel.add(aboutButton);
 
         JPanel chatPanel = new JPanel();
