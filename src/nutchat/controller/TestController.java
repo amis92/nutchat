@@ -14,6 +14,14 @@ import nutchat.model.IUser;
 import nutchat.model.MessageType;
 import nutchat.view.IChatView;
 
+/**
+ * Copycat controller. Any message it receives, sends back in from Copy:
+ * previousMessage.
+ * Contains sample contact list.
+ * 
+ * @author Amadeusz Sadowski 2014
+ * 
+ */
 public class TestController implements IChatController
 {
     private IChatView view;
@@ -47,8 +55,7 @@ public class TestController implements IChatController
         chatHistory.get(message.getRecipient()).add(message);
         view.showNewMessage(message);
         ChatMessage msgBack = new ChatMessage(MessageType.TEXT, String.format("Copy: %s",
-                        message.getText()), message.getRecipient(), message
-                        .getSender());
+                        message.getText()), message.getRecipient(), message.getSender());
         chatHistory.get(message.getRecipient()).add(msgBack);
         view.showNewMessage(msgBack);
     }
