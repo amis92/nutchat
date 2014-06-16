@@ -17,21 +17,29 @@ import javax.swing.border.TitledBorder;
 
 import nutchat.model.IMessage;
 import nutchat.model.IUser;
+import nutchat.model.MessageDispatcher;
 
+/**
+ * Represents single-user chat panel with chat history and a new message field.
+ * 
+ * @author Amadeusz Sadowski 2014
+ * 
+ */
 public class ChatPanel extends JPanel
 {
-
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private final DefaultListModel<IMessage> listModel;
+    private final IUser chatPartner;
+    private final MessageDispatcher dispatcher;
 
     /**
      * Create the panel.
      */
-    public ChatPanel(IUser recipient, List<IMessage> chat)
+    public ChatPanel(IUser chatPartner, List<IMessage> chat, MessageDispatcher dispatcher)
     {
+        this.chatPartner = chatPartner;
+        this.dispatcher = dispatcher;
+
         GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 0 };
         gridBagLayout.rowHeights = new int[] { 0 };
@@ -76,7 +84,7 @@ public class ChatPanel extends JPanel
 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportBorder(new TitledBorder(null, String.format("Chat with %s:",
-                        recipient.getUserName()), TitledBorder.LEADING, TitledBorder.TOP, null,
+                        chatPartner.getUserName()), TitledBorder.LEADING, TitledBorder.TOP, null,
                         null));
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         splitPane.setLeftComponent(scrollPane);
@@ -86,10 +94,19 @@ public class ChatPanel extends JPanel
         {
             listModel.addElement(message);
         }
-        
+
         JList<IMessage> chatMessagesList = new JList<>(listModel);
         scrollPane.setViewportView(chatMessagesList);
-
     }
 
+    /**
+     * Appends new message to message list.
+     * 
+     * @param message
+     *            - the message to be appended.
+     */
+    public void showNewMessage(IMessage message)
+    {
+        listModel.addElement(message);
+    }
 }

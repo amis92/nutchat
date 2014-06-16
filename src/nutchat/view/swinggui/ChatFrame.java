@@ -31,6 +31,7 @@ import javax.swing.event.ListSelectionListener;
 import nutchat.controller.IChatController;
 import nutchat.model.IMessage;
 import nutchat.model.IUser;
+import nutchat.model.MessageDispatcher;
 
 public class ChatFrame extends JFrame
 {
@@ -245,6 +246,7 @@ public class ChatFrame extends JFrame
         private final JPanel panel;
         private final CardLayout cardLayout;
         private final Map<IUser, ChatPanel> chatMap;
+        private final MessageDispatcher dispatcher;
         private IUser currentChatUser = null;
         private IUser messageAwaitingUser = null;
 
@@ -253,6 +255,7 @@ public class ChatFrame extends JFrame
             this.panel = cardPanel;
             this.cardLayout = (CardLayout) cardPanel.getLayout();
             this.chatMap = new HashMap<>();
+            this.dispatcher = new MessageDispatcher(currentUser, controller);
         }
 
         /**
@@ -270,7 +273,7 @@ public class ChatFrame extends JFrame
             currentChatUser = user;
             if (!chatMap.containsKey(user))
             {
-                chatMap.put(user, new ChatPanel(user, chat));
+                chatMap.put(user, new ChatPanel(user, chat, dispatcher));
                 panel.add(chatMap.get(user), user.getUserName());
             }
             // chatMap.get(user).;
