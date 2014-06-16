@@ -21,7 +21,7 @@ public class ChatSwingView implements IChatView
 
         // GUI setup
         frame = new ChatFrame(controller);
-        frame.setBounds(100, 100, 450, 300);
+        frame.setBounds(100, 100, 640, 720);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         controller.getCurrentUser();

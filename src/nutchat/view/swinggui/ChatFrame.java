@@ -230,6 +230,7 @@ public class ChatFrame extends JFrame
                         if (newUser != null)
                         {
                             controller.addUser(newUser);
+                            controller.getUsers();
                         }
                     }
                 });
@@ -237,7 +238,7 @@ public class ChatFrame extends JFrame
     }
 
     /**
-     * Manages CardLayout of chatPanel
+     * Manages CardLayout of chatPanel.
      * 
      * @author Amadeusz
      * 

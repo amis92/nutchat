@@ -60,6 +60,7 @@ public class ChatPanel extends JPanel
         add(splitPane, gbc_splitPane);
 
         JPanel newMessagePanel = new JPanel();
+        newMessagePanel.setBorder(new TitledBorder(null, "Enter message:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         splitPane.setRightComponent(newMessagePanel);
         GridBagLayout gbl_newMessagePanel = new GridBagLayout();
         gbl_newMessagePanel.columnWidths = new int[] { 1, 0 };
